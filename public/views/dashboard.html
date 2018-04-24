@@ -1,0 +1,465 @@
+<div class="page page-dashboard" layout-gt-sm="column" ng-controller="DashboardCtrl">
+
+ <!--   <div flex class="today-stats">
+        <h3 class="md-caption" layout-margin>Today's Stats</h3>
+
+        <div layout-gt-sm="row">
+            <div flex-gt-sm="33" class="stats-wrapper">
+                <div class="stats">
+                    <div class="val">3.1K</div>
+                    <div class="md-caption text-uppercase">Page Views</div>
+                </div>
+                <span class="chart-trends" sparkline type="line" width="8em" height="2em" fill-color="transparent" line-color="#388E3C">3,4,2,3,4,1,4,2</span>
+            </div>
+
+            <div flex-gt-sm="33" class="stats-wrapper">
+                <div class="stats">
+                    <div class="val">288</div>
+                    <div class="md-caption text-uppercase">Downloads</div>
+                </div>
+                <span class="chart-trends" sparkline type="line" width="8em" height="2em" fill-color="transparent" line-color="#388E3C">3,4,2,3,4,4,6,2</span>
+            </div>
+
+            <div flex-gt-sm="33" class="stats-wrapper">
+                <div class="stats">
+                    <div class="val">$189</div>
+                    <div class="md-caption text-uppercase">Earnings</div>
+                </div>
+                <span class="chart-trends" sparkline type="line" width="8em" height="2em" fill-color="transparent" line-color="#388E3C">3,4,2,3,4,5,4,5</span>
+            </div>
+        </div>
+    </div>-->
+
+    <div layout-gt-sm="row">
+        <md-card flex>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-subhead text-uppercase text-bold">Métodos de evaluación</span>
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content style="text-align: center;">
+                <md-tabs md-dynamic-height md-border-bottom>
+                    <md-tab label="Payback Period">
+                        <md-content class="md-padding">
+                            <span class="md-subhead text-uppercase text-bold">Payback Period</span>
+                            <p layout="row" layout-align="start star">
+                                A method used to determine when the initial investment will be earned back while
+                                considering the time value money (i.e. interests) used to support the projects
+                            </p>
+
+                            <form>
+                                <div layout="row">
+
+                                    <md-input-container flex>
+                                        <label>Periodos</label>
+                                        <input ng-model="paybackPeriod.periods" type="number" ng-change="addPPPeriods()">
+                                    </md-input-container>
+
+                                    <md-input-container flex>
+                                        <label>Principal</label>
+                                        <input ng-model="paybackPeriod.principal" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex>
+                                        <label>Interés (%)</label>
+                                        <input ng-model="paybackPeriod.tasaInteres" type="number">
+                                    </md-input-container>
+                                </div>
+                            </form>
+                            <div layout="row">
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="calculatePP()">Calcular</md-button>
+                                </div>
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="cleanPP()">Limpiar</md-button>
+                                </div>
+                            </div>
+                            <div layout="column" layout-padding="">
+                                <div layout="row">
+                                    <div flex="10"></div>
+                                    <div flex="30">
+                                        <span>Outflow</span>
+                                    </div>
+                                    <div flex="30">
+                                        <span>Inflow</span>
+                                    </div>
+                                    <div flex="30">
+                                        <span>Cumulative Cash Flow</span>
+                                    </div>
+                                </div>
+                                <div layout="row" ng-repeat="period in paybackPeriod.periodos" >
+                                    <div flex="10" layout="row" layout-align="center center">
+                                        {{period.period}}
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.outflow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.inflow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.cumulativeCashFlow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="NPV">
+                        <md-content class="md-padding">
+                            <span class="md-subhead text-uppercase text-bold">Net Present Value</span>
+                            <p layout="row" layout-align="start star">
+                                Benchmark used to determine the value of an investment. It allows us to transform costs throughout
+                                a project's life to today's value, while taking into account the interest rates. All inflows
+                                and outflows applied in time for the Project can be converted to present values. It allows comparison
+                                of several projects and alternatives
+                            </p>
+                            <form>
+                                <div layout="row" layout-wrap>
+                                    <md-input-container flex="25">
+                                        <label>Periodos</label>
+                                        <input ng-model="NPV.periods" type="number" ng-change="addNPVPeriods()">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Principal</label>
+                                        <input ng-model="NPV.principal" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Interés (%)</label>
+                                        <input ng-model="NPV.interest" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Tax Rate (%)</label>
+                                        <input ng-model="NPV.taxRate" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>salvage Value</label>
+                                        <input ng-model="NPV.salvageValue" type="number" >
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Period of Salvage Value</label>
+                                        <input ng-model="NPV.salvageValuePeriod" type="number">
+                                    </md-input-container>
+                                </div>
+                            </form>
+                            <div layout="row">
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="calculateNPV()">Calcular</md-button>
+                                </div>
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="cleanNPV()">Limpiar</md-button>
+                                </div>
+                            </div>
+                            <div layout="column" layout-padding="">
+                                <div layout="row">
+                                    <div flex="8"></div>
+                                    <div flex="">
+                                        <span>Outflow</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Inflow</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Net Cash Flow</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Cumulative Cash Flow</span>
+                                    </div>
+                                </div>
+                                <div layout="row" ng-repeat="period in NPV.periodos" >
+                                    <div flex="10" layout="row" layout-align="center center">
+                                        {{period.period}}
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.outflow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.inflow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.netCashFlow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex="30">
+                                        <md-input-container flex>
+                                            <input ng-model="period.cumulativeCashFlow" type="number">
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Depreciation">
+                        <md-content class="md-padding">
+                            <span class="md-subhead text-uppercase text-bold">Depreciation Methods</span>
+                            <span class="md-subhead text-uppercase text-bold">Straight Line</span>
+                            <p layout="row" layout-align="start star">
+                                A simple method to calculate the conceded discount for the capital consumption. It is commonly use for
+                                the organizations' internal planning. The rescue value is subtracted from the initial investment and
+                                divided by the asset's useful life (in years). It differs in its depreciation calculation from the Real
+                                depreciation
+                            </p>
+                            <span class="md-subhead text-uppercase text-bold">Modified Accelerated Cost Recovery System (MACRS)</span>
+                            <p layout="row" layout-align="start star">
+                                Reduces taxes on the first years of an Asset using a 6 category table where each category is applied to
+                                a different type of asset.
+                                Class
+                                3 year: R&D Equipment and Instruments.
+                                5 year: Cars, Computer & telecommunications equipment
+                                7 year: Industrial equipment and office furniture
+                                10 year: specialized assets
+                                15-20 year: Real State
+                            </p>
+                            <form>
+                                <div layout="row" layout-wrap>
+                                    <md-input-container flex="25">
+                                        <label>Periodos</label>
+                                        <input ng-model="depreciation.periods" type="number" ng-change="addDepreciationPeriods()">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Starting Year</label>
+                                        <input ng-model="depreciation.startingYear" type="number" ng-change="addNPVPeriods()">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Principal</label>
+                                        <input ng-model="depreciation.principal" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Tax Rate (%)</label>
+                                        <input ng-model="depreciation.taxRate" type="number">
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Salvage Value</label>
+                                        <input ng-model="depreciation.salvageValue" type="number" >
+                                    </md-input-container>
+
+                                    <md-input-container flex="25">
+                                        <label>Period of Salvage Value</label>
+                                        <input ng-model="depreciation.salvageValuePeriod" type="number">
+                                    </md-input-container>
+                                    <md-input-container flex="25">
+                                        <label>Depreciation Category</label>
+                                        <input ng-model="depreciation.depreciationCategory" type="number">
+                                    </md-input-container>
+                                </div>
+                            </form>
+                            <div layout="row">
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="calculateDepreciation(true, false)">Calcular Straight Line</md-button>
+                                </div>
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="calculateDepreciation(false, true)">Calcular MACRS</md-button>
+                                </div>
+                                <div flex layout="row" layout-align="center center">
+                                    <md-button class="md-raised md-primary" ng-click="cleanDepreciation()">Limpiar</md-button>
+                                </div>
+                            </div>
+                            <div layout="column" layout-padding="">
+                                <div layout="row">
+                                    <div flex="8"></div>
+                                    <div flex="">
+                                        <span>Years</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Dep Rate</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Annual Dep</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Acc Dep</span>
+                                    </div>
+                                    <div flex="">
+                                        <span>Value in Ledgers</span>
+                                    </div>
+                                </div>
+                                <div layout="row" ng-repeat="period in depreciation.periodos" >
+                                    <div flex="8" layout="row" layout-align="center center">
+                                        {{period.period}}
+                                    </div>
+                                    <div flex layout="row" layout-align="center center">
+                                        {{depreciation.startingYear+period.period}}
+                                    </div>
+                                    <div flex>
+                                        <md-input-container flex>
+                                            <input ng-model="period.depreciationRate" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container flex>
+                                            <input ng-model="period.AnnualDepreciation" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container flex>
+                                            <input ng-model="period.accumulatedDepreciation" type="number">
+                                        </md-input-container>
+                                    </div>
+                                    <div flex>
+                                        <md-input-container flex>
+                                            <input ng-model="period.ledgersValue" type="number">
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+
+                </md-tabs>
+
+            	<!--<c3-chart id="c3chartbrowsershare" config="browserconfig"></c3-chart>-->
+            </md-card-content>
+        </md-card>
+
+    </div>
+
+<!--    <div layout-gt-sm="row">
+
+
+        <md-card flex-gt-sm="60">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-subhead text-uppercase text-bold">Visitors Age</span>
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+                <c3-chart id="c3visitorsage" config="visitorsageconfig"></c3-chart>
+
+            </md-card-content>
+
+        </md-card>
+
+        <md-card flex-gt-sm="40">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-subhead text-uppercase text-bold">Activities</span>
+                    &lt;!&ndash; <md-divider></md-divider> &ndash;&gt;
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content class="dashboard-activities">
+                <ul class="list-unstyled">
+                    <li class="primary">
+                        <span class="point"></span>
+                        <span class="time md-caption">2 mins ago</span>
+                        <p>Jonathan attended a meeting.</p>
+                    </li>
+                    <li class="success">
+                        <span class="point"></span>
+                        <span class="time md-caption">1 hour ago</span>
+                        <p>Designed the wordpress theme</p>
+                    </li>
+                    <li class="warning">
+                        <span class="point"></span>
+                        <span class="time md-caption">4:30 p.m</span>
+                        <p>Lily created her account.</p>
+                    </li>
+                    <li class="info">
+                        <span class="point"></span>
+                        <span class="time md-caption">2 days ago</span>
+                        <p>Your domain will expired in 9 days.</p>
+                    </li>
+                    <li class="danger">
+                        <span class="point"></span>
+                        <span class="time md-caption">1 week ago</span>
+                        <p>Lorem ipsum dolar sit amet consectator.</p>
+                    </li>
+                </ul>
+
+            </md-card-content>
+
+        </md-card>
+
+    </div>
+
+    <div layout-gt-sm="row">
+        <md-card flex-gt-sm="100">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-subhead text-uppercase text-bold">Project Stats</span>
+                    &lt;!&ndash; <md-divider></md-divider> &ndash;&gt;
+                </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+                <md-table-container>
+                    <table md-table>
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column class="text-uppercase">Id</th>
+                                <th md-column class="text-uppercase">Project</th>
+                                <th md-column class="text-uppercase">Fees</th>
+                                <th md-column class="text-uppercase">Status</th>
+                                <th md-column class="text-uppercase">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row>
+                                <td md-cell>220</td>
+                                <td md-cell>Convert to Sass</td>
+                                <td md-cell>$340</td>
+                                <td md-cell><md-progress-circular md-mode="determinate" value="60" class="md-warn" md-diameter="25"></md-progress-circular></td>
+                                <td md-cell>10<sup>th</sup> Dec 2016</td>
+                            </tr>
+                            <tr md-row>
+                                <td md-cell>101</td>
+                                <td md-cell>Designing wordpress theme</td>
+                                <td md-cell>$1340</td>
+                                <td md-cell><md-progress-circular md-mode="determinate" class="md-accent" value="80"  md-diameter="25"></md-progress-circular></td>
+                                <td md-cell>20<sup>th</sup> Dec 2016</td>
+                            </tr>
+                            <tr md-row>
+                                <td md-cell>310</td>
+                                <td md-cell>Adding animations to template</td>
+                                <td md-cell>$120</td>
+                                <td md-cell><md-progress-circular md-mode="determinate" value="90" md-diameter="25"></md-progress-circular></td>
+                                <td md-cell>2<sup>nd</sup> Dec 2016</td>
+                            </tr>
+                            <tr md-row>
+                                <td md-cell>405</td>
+                                <td md-cell>Lorem ipsum dolar sit amet</td>
+                                <td md-cell>$310</td>
+                                <td md-cell><md-progress-circular md-mode="determinate" value="50" class="md-warn" md-diameter="25"></md-progress-circular></td>
+                                <td md-cell>29<sup>th</sup> Nov 2016</td>
+                            </tr>
+                            <tr md-row>
+                                <td md-cell>445</td>
+                                <td md-cell>Building admin template</td>
+                                <td md-cell>$890</td>
+                                <td md-cell><md-progress-circular md-mode="determinate" value="30" class="md-warn md-hue-2" md-diameter="30"></md-progress-circular></td>
+                                <td md-cell>1<sup>st</sup> Jan 2017</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </md-table-container>
+            </md-card-content>
+
+        </md-card>
+
+    </div>-->
+
+
+
+</div>

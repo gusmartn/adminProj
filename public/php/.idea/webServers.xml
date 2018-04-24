@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ed632d50-febf-49c4-9ed6-24e70a9199f1" name="ftp.gleefull.com.mx" url="http://ftp.gleefull.com.mx">
+        <fileTransfer host="ftp.gleefull.com.mx" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
